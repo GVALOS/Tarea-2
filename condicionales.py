@@ -101,6 +101,7 @@ PAGINA = """
     <div class="franja">Estado del expediente del empleado</div>
     <main>
         <div class="tarjeta">
+            <p class="perfil">Empleado: <strong>{{ empleado if empleado else "sin especificar" }}</strong></p>
             <p class="perfil">Perfil: <strong>{{ perfil if perfil else "sin especificar" }}</strong></p>
             {% if documentos %}
             <ul>
@@ -124,31 +125,34 @@ PAGINA = """
 
 @app.route("/expediente")
 def evaluarExpediente():
-    # Los datos llegan por query string: ?tipo=medico&dui=si&poli=si&carne=no
+    # Los datos llegan por query string: ?empleado=Nombre&tipo=medico&dui=si&poli=si&carne=no&cv=si&solvencia=si
+    empleado = request.args.get("empleado", "")
     tipo = request.args.get("tipo", "").lower()
     dui = request.args.get("dui", "no").lower() == "si"
     poli = request.args.get("poli", "no").lower() == "si"
     carne = request.args.get("carne", "no").lower() == "si"
+    cv = request.args.get("cv", "no").lower() == "si"
+    solvencia = request.args.get("solvencia", "no").lower() == "si"
 
     if tipo == "medico":
-        # El médico necesita DUI, antecedentes y carnet
-        documentos = {"DUI": dui, "Antecedentes penales": poli, "Carnet médico": carne}
-        if dui == False and poli == False and carne == False:
+        # El médico necesita DUI, antecedentes, carnet, CV y solvencia
+        documentos = {"DUI": dui, "Antecedentes penales": poli, "Carnet médico": carne, "CV": cv, "Solvencia de la Policía": solvencia}
+        if dui == False and poli == False and carne == False and cv == False and solvencia == False:
             estado = "Ningún documento adjuntado"
             clase = "ninguno"
-        elif dui == True and poli == True and carne == True:
+        elif dui == True and poli == True and carne == True and cv == True and solvencia == True:
             estado = "Completo"
             clase = "completo"
         else:
             estado = "Incompleto"
             clase = "incompleto"
     elif tipo == "otro":
-        # El resto del personal necesita DUI y antecedentes
-        documentos = {"DUI": dui, "Antecedentes penales": poli}
-        if dui == False and poli == False:
+        # El resto del personal necesita DUI, antecedentes, CV y solvencia
+        documentos = {"DUI": dui, "Antecedentes penales": poli, "CV": cv, "Solvencia de la Policía": solvencia}
+        if dui == False and poli == False and cv == False and solvencia == False:
             estado = "Ningún documento adjuntado"
             clase = "ninguno"
-        elif dui == True and poli == True:
+        elif dui == True and poli == True and cv == True and solvencia == True:
             estado = "Completo"
             clase = "completo"
         else:
@@ -161,7 +165,7 @@ def evaluarExpediente():
         clase = "desconocido"
 
     return render_template_string(
-        PAGINA, perfil=tipo, documentos=documentos, estado=estado, clase=clase
+        PAGINA, empleado=empleado, perfil=tipo, documentos=documentos, estado=estado, clase=clase
     )
 
 
