@@ -42,32 +42,20 @@ Para que el estado sea Completo, debe tener:
 Si falta uno o más documentos, el estado será Incompleto.
 Si los tres documentos están en False, el estado será Ningún documento adjuntado.
 Preguntas de análisis
-## Preguntas de análisis
-
-### ¿Cuáles son los estados posibles reales del dato que van a evaluar?
-
+¿Cuáles son los estados posibles reales del dato que van a evaluar?
 Por documento:
 - Completo
 - Faltante
-
 Estado general:
 - Completo
 - Incompleto
 - Ningún documento adjuntado
-
-### ¿Qué valor o condición define cada estado?
-
-- `True`: documento completo.
-- `False`: documento faltante.
-
+¿Qué valor o condición define cada estado?
+- True: documento completo.
+- False: documento faltante.
 El estado global depende del tipo de empleado y de los documentos requeridos.
-
-### ¿Hay reglas de negocio confirmadas que aún no están reflejadas?
-
+¿Hay reglas de negocio confirmadas que aún no están reflejadas?
 Sí. Antes del registro y evaluación de documentos, el usuario debe iniciar sesión con usuario y contraseña.
-
-### ¿Qué pasa si el dato no encaja en ningún estado esperado?
-
-Los documentos se inicializan en `False` y solo cambian a `True` cuando son adjuntados.
-
+¿Qué pasa si el dato no encaja en ningún estado esperado?
+Los documentos se inicializan en False y solo cambian a True cuando son adjuntados.
 Si el tipo de empleado no es válido, se debe mostrar un mensaje de error y solicitar nuevamente el dato.
